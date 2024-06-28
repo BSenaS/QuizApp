@@ -1,14 +1,25 @@
+<!-- Watch -> React useEffect.Watches a state and do our logic. -->
+
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import q from "./data/quizes.json";
 const quizes = ref(q);
+const searchInput = ref("");
+
+watch(searchInput, () => {
+  console.log(searchInput.value);
+  quizes.value = q.filter((quiz) =>
+    quiz.name.toLowerCase().includes(searchInput.value.toLowerCase())
+  );
+});
 </script>
 
 <template>
   <div class="container">
     <header>
       <h1>Quizes</h1>
-      <input type="text" placeholder="Search..." />
+      <!-- Model Binding v-model updates the value of searchInput via input's event.target.value -->
+      <input v-model.trim="searchInput" type="text" placeholder="Search..." />
     </header>
     <div class="options-container">
       <div v-for="quiz in quizes" :key="quiz.id" class="card">
